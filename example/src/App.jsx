@@ -60,164 +60,85 @@ const App = () => {
         iframeRef.style.marginBottom = '20px';
     };
 
-    const handleApiReady = apiObj => {
-        apiRef.current = apiObj;
-        apiRef.current.on('knockingParticipant', handleKnockingParticipant);
-        apiRef.current.on('audioMuteStatusChanged', payload => handleAudioStatusChange(payload, 'audio'));
-        apiRef.current.on('videoMuteStatusChanged', payload => handleAudioStatusChange(payload, 'video'));
-        apiRef.current.on('raiseHandUpdated', printEventOutput);
-        apiRef.current.on('titleViewChanged', printEventOutput);
-        apiRef.current.on('chatUpdated', handleChatUpdates);
-        apiRef.current.on('knockingParticipant', handleKnockingParticipant);
-    };
-
-    const handleReadyToClose = () => {
-        /* eslint-disable-next-line no-alert */
-        alert('Ready to close...');
-    };
-
-    const generateRoomName = () => `JitsiMeetRoomNo${Math.random() * 100}-${Date.now()}`;
-
-    // Multiple instances demo
-    const renderNewInstance = () => {
-        if (!showNew) {
-            return null;
-        }
-
-        return (
-            <JitsiMeeting
-                roomName = { generateRoomName() }
-                getIFrameRef = { handleJitsiIFrameRef2 } />
-        );
-    };
-
-    const renderButtons = () => (
-        <div style = {{ margin: '15px 0' }}>
-            <div style = {{
-                display: 'flex',
-                justifyContent: 'center'
-            }}>
-                <button
-                    type = 'text'
-                    title = 'Click to execute toggle raise hand command'
-                    style = {{
-                        border: 0,
-                        borderRadius: '6px',
-                        fontSize: '14px',
-                        background: '#f8ae1a',
-                        color: '#040404',
-                        padding: '12px 46px',
-                        margin: '2px 2px'
-                    }}
-                    onClick = { () => apiRef.current.executeCommand('toggleRaiseHand') }>
-                    Raise hand
-                </button>
-                <button
-                    type = 'text'
-                    title = 'Click to approve/reject knocking participant'
-                    style = {{
-                        border: 0,
-                        borderRadius: '6px',
-                        fontSize: '14px',
-                        background: '#0056E0',
-                        color: 'white',
-                        padding: '12px 46px',
-                        margin: '2px 2px'
-                    }}
-                    onClick = { () => resolveKnockingParticipants(({ name }) => !name.includes('test')) }>
-                    Resolve lobby
-                </button>
-                <button
-                    type = 'text'
-                    title = 'Click to execute subject command'
-                    style = {{
-                        border: 0,
-                        borderRadius: '6px',
-                        fontSize: '14px',
-                        background: '#df486f',
-                        color: 'white',
-                        padding: '12px 46px',
-                        margin: '2px 2px'
-                    }}
-                    onClick = { () => apiRef.current.executeCommand('subject', 'New Subject')}>
-                    Change subject
-                </button>
-                <button
-                    type = 'text'
-                    title = 'Click to create a new JitsiMeeting instance'
-                    style = {{
-                        border: 0,
-                        borderRadius: '6px',
-                        fontSize: '14px',
-                        background: '#3D3D3D',
-                        color: 'white',
-                        padding: '12px 46px',
-                        margin: '2px 2px'
-                    }}
-                    onClick = { () => toggleShowNew(!showNew) }>
-                    Toggle new instance
-                </button>
-            </div>
-        </div>
-    );
-
     const renderLog = () => logItems.map(
         (item, index) => (
             <div
-                style = {{
+                style={{
                     fontFamily: 'monospace',
                     padding: '5px'
                 }}
-                key = { index }>
+                key={index}>
                 {item}
             </div>
         )
     );
 
-    const renderSpinner = () => (
-        <div style = {{
-            fontFamily: 'sans-serif',
-            textAlign: 'center'
-        }}>
-            Loading..
-        </div>
-    );
-
-
     return (
-        <>
-            <h1 style = {{
-                fontFamily: 'sans-serif',
-                textAlign: 'center'
-            }}>
-                JitsiMeeting Demo App
-            </h1>
-            <JitsiMeeting
-                roomName = { generateRoomName() }
-                spinner = { renderSpinner }
-                configOverwrite = {{
-                    subject: 'lalalala',
-                    hideConferenceSubject: false
-                }}
-                lang = 'de'
-                onApiReady = { externalApi => handleApiReady(externalApi) }
-                onReadyToClose = { handleReadyToClose }
-                getIFrameRef = { handleJitsiIFrameRef1 } />
-            <JaaSMeeting
-                roomName = { generateRoomName() }
-
-                // Update this with the `8x8.vc` or `stage.8x8.vc` version of interest
-                // and avoid mixing up different domains and release versions
-                // on the same page at the same time, as only the first
-                // external api script will be loaded.
-                // release = 'release-1234'
-
-                useStaging = { true }
-                getIFrameRef = { handleJaaSIFrameRef } />
-            {renderButtons()}
-            {renderNewInstance()}
-            {renderLog()}
-        </>
+        <div style={{ background: '#2f2f2f', minHeight: '100vh', padding: '16px 0' }}>
+            <div style={{ margin: '0 20%' }}>
+                <div
+                    style={{
+                        width: '100%',
+                        marginBottom: '16px',
+                        background: '#111',
+                        borderRadius: '10px',
+                        overflow: 'hidden',
+                        boxShadow: '0 10px 24px rgba(0, 0, 0, 0.25)'
+                    }}>
+                    <div
+                        style={{
+                            height: '440px',
+                            background: 'linear-gradient(135deg, #1f2937, #0f172a)',
+                            color: '#fff',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}/>
+                    <div
+                        style={{
+                            padding: '12px 14px',
+                            background: '#18181b',
+                            color: '#e4e4e7',
+                            fontFamily: 'sans-serif'
+                        }}>
+                        <div
+                            style={{
+                                height: '6px',
+                                borderRadius: '4px',
+                                background: '#3f3f46',
+                                marginBottom: '10px',
+                                overflow: 'hidden'
+                            }}>
+                            <div
+                                style={{
+                                    width: '38%',
+                                    height: '100%',
+                                    background: '#ef4444'
+                                }}/>
+                        </div>
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                fontSize: '13px'
+                            }}>
+                            <span>▶ 01:14 / 03:12</span>
+                            <span>HD • 1x • ⛶</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    style={{
+                        width: '100%'
+                    }}>
+                    <JaaSMeeting
+                        appId="vpaas-magic-cookie-0dc7eb40b18c4b21a27f4e2c7df65794"
+                        roomName="SampleAppEmbarrassedRunnersConsentCompletely"
+                        getIFrameRef={handleJaaSIFrameRef}/>
+                </div>
+                {renderLog()}
+            </div>
+        </div>
     );
 };
 
